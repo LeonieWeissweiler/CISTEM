@@ -1,0 +1,2 @@
+# CISTEM
+Stemmer for German
