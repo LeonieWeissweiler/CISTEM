@@ -27,11 +27,10 @@ sub stem{
     $word =~ s/^ge(.{4,})/\1/;
 
     $word =~s/sch/\$/g;
-
-    $word =~ s/(.)\1/\1\*/g;
-
     $word =~s/ei/\%/g;
     $word =~s/ie/\&/g;
+
+    $word =~ s/(.)\1/\1\*/g;
 
     while(length($word)>3){
         if(length($word)>5 && ($word =~ s/e[mr]$// || $word =~ s/nd$//)){
@@ -48,10 +47,10 @@ sub stem{
         }
     }
 
+
     $word =~s/(.)\*/\1\1/g;
 
     $word =~s/\$/sch/g;
-
     $word =~s/\%/ei/g;
     $word =~s/\&/ie/g;
 
@@ -61,29 +60,29 @@ sub stem{
 sub segment{
     $word = shift;
     $case_insensitive = shift;
-
-    $rest = "";
+    $rest_length = 0;
 
     $upper = (ucfirst $word eq $word);
 
     $word = lc($word);
 
+    $original = $word;
+
     $word =~s/sch/\$/g;
-
-    $word =~ s/(.)\1/\1\*/g;
-
     $word =~s/ei/\%/g;
     $word =~s/ie/\&/g;
 
+    $word =~ s/(.)\1/\1\*/g;
+
     while(length($word)>3){
         if(length($word)>5 && ($word =~ s/(e[mr])$// || $word =~ s/(nd)$//)){
-            $rest = $1 . $rest;
+            $rest_length += 2;
         }
         elsif((!($upper) || $case_insensitive) && $word =~ s/t$//){
-            $rest = "t" . $rest;
+            $rest_length++;
         }
         elsif($word =~ s/([esn])$//){
-            $rest = $1 . $rest;
+            $rest_length++;
         }
         else{
             last;
@@ -93,9 +92,17 @@ sub segment{
     $word =~s/(.)\*/\1\1/g;
 
     $word =~s/\$/sch/g;
-
     $word =~s/\%/ei/g;
     $word =~s/\&/ie/g;
+
+    if($rest_length){
+        $rest = substr($original, - $rest_length);
+    }
+    else{
+        $rest = "";
+    }
+
+
 
     return ($word,$rest);
 }
@@ -152,3 +159,5 @@ addition to returning the stem, it also returns the rest that was removed at
 the end. To be able to return the stem unchanged so the stem and the rest
 can be concatenated to form the original word, all subsitutions that altered
 the stem in any other way than by removing letters at the end were left out.
+
+=cut
