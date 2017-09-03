@@ -12,8 +12,4 @@ results for runtime.
 
 More information on how we evaluated runtimes and stemming quality can be found in our paper:
 
-<<<<<<< HEAD
-Leonie Weißweiler, Alexander Fraser (2017). [Developing a Stemmer for German Based on a Comparative Analysis of Publicly Available Stemmers.](https://cis.lmu.de/~weissweiler/cistem/) In Proceedings of the German Society for Computational Linguistics and Language Technology (GSCL), to appear. 
-=======
-[Leonie Weißweiler, Alexander Fraser (2017). Developing a Stemmer for German Based on a Comparative Analysis of Publicly Available Stemmers. In Proceedings of the German Society for Computational Linguistics and Language Technology (GSCL), to appear. ](https://cis.lmu.de/~weissweiler/cistem/)
->>>>>>> master
+Leonie Weißweiler, Alexander Fraser (2017). [Developing a Stemmer for German Based on a Comparative Analysis of Publicly Available Stemmers.](https://cis.lmu.de/~weissweiler/cistem/) In Proceedings of the German Society for Computational Linguistics and Language Technology (GSCL), to appear.

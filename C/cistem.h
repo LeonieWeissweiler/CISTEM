@@ -18,13 +18,14 @@
 #define CISTEM_H
 
 /*	This method takes the word to be stemmed and a boolean specifiying if case-insensitive stemming should be used and returns the stemmed word. If only the word
-	is passed to the method or the second parameter is 1, normal case-sensitive stemming is used, if the second parameter is 0, case-insensitive stemming is used.
+	is passed to the method or the second parameter is 0, normal case-sensitive stemming is used, if the second parameter is 1, case-insensitive stemming is used.
 	
 	Case sensitivity improves performance only if words in the text may be incorrectly upper case.
 	For all-lowercase and correctly cased text, best performance is achieved by
 	using the case-sensitive version.
 */
 wchar_t* stem(wchar_t* word);
+wchar_t* stem_case_insensitive(wchar_t* word);
 
 /*	This method works very similarly to stem. The only difference is that in
 	addition to returning the stem, it also returns the rest that was removed at
@@ -36,5 +37,6 @@ wchar_t* stem(wchar_t* word);
 	to the suffix second
 */
 wchar_t** segment(wchar_t* word);
+wchar_t** segment_case_insensitive(wchar_t* word);
 
 #endif

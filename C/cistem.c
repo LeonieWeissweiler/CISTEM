@@ -144,7 +144,7 @@ void copy_and_denormalize(wchar_t* source, unsigned long length, wchar_t* destin
 	destination[offset] = 0;
 }
 
-unsigned long strip_suffixes(wchar_t* word, unsigned long length, int uppercase) {
+unsigned long strip_suffixes(wchar_t* word, unsigned long length, int uppercase, int case_sensitive) {
 	unsigned long string_length = wcslen(word);
 	
 	while (string_length > 3) {
@@ -153,7 +153,7 @@ unsigned long strip_suffixes(wchar_t* word, unsigned long length, int uppercase)
 			 match_suffix(word, string_length, L"er", 2) ||
 			 match_suffix(word, string_length, L"nd", 2))) {
 			string_length -= 2;
-		} else if (!uppercase && match_suffix(word, string_length, L"t", 1)) {
+		} else if (((!uppercase) || case_sensitive) && match_suffix(word, string_length, L"t", 1)) {
 			string_length -= 1;
 		} else if ((match_suffix(word, string_length, L"e", 1) ||
 					match_suffix(word, string_length, L"s", 1) ||
@@ -166,8 +166,8 @@ unsigned long strip_suffixes(wchar_t* word, unsigned long length, int uppercase)
 	
 	return string_length;
 }
-
-wchar_t* stem(wchar_t* word) {
+	
+wchar_t* stem_internal(wchar_t* word, int case_insensitive) {
 	int uppercase = !iswlower(word[0]);
 	
 	unsigned long length = wcslen(word);
@@ -177,7 +177,8 @@ wchar_t* stem(wchar_t* word) {
 	
 	copy_and_normalize(word, length, intermediate, 1);
 	
-	unsigned long stem_length = strip_suffixes(intermediate, intermediate_length, uppercase);
+	unsigned long stem_length = strip_suffixes(intermediate, intermediate_length, uppercase, case_insensitive);
+	
 	intermediate[stem_length] = 0;
 	
 	copy_and_denormalize(intermediate, stem_length, result);
@@ -186,7 +187,15 @@ wchar_t* stem(wchar_t* word) {
 	return result;
 }
 
-wchar_t** segment(wchar_t* word) {
+wchar_t* stem(wchar_t* word) {
+	return stem_internal(word, 0);	
+}
+
+wchar_t* stem_case_insensitive(wchar_t* word) {
+	return stem_internal(word, 1);	
+}
+
+wchar_t** segment_internal(wchar_t* word, int case_insensitive) {
 	wchar_t** result = malloc(2 * sizeof(wchar_t*));
 	int uppercase = !iswlower(word[0]);
 	
@@ -198,7 +207,7 @@ wchar_t** segment(wchar_t* word) {
 	
 	unsigned long normalized_length = copy_and_normalize(word, length, intermediate, 0);
 	
-	unsigned long stem_length = strip_suffixes(intermediate, intermediate_length, uppercase);
+	unsigned long stem_length = strip_suffixes(intermediate, intermediate_length, uppercase, case_insensitive);
 	
 	wcsncpy(suffix_result, intermediate + stem_length, normalized_length - stem_length);
 	suffix_result[normalized_length - stem_length] = 0;
@@ -213,6 +222,14 @@ wchar_t** segment(wchar_t* word) {
 	result[1] = suffix_result;
 	
 	return result;
+}
+
+wchar_t** segment(wchar_t* word) {
+	return segment_internal(word, 0);	
+}
+
+wchar_t** segment_case_insensitive(wchar_t* word) {
+	return segment_internal(word, 1);	
 }
 
 //#include <locale.h>
