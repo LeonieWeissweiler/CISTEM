@@ -231,17 +231,3 @@ wchar_t** segment(wchar_t* word) {
 wchar_t** segment_case_insensitive(wchar_t* word) {
 	return segment_internal(word, 1);	
 }
-
-//#include <locale.h>
-//
-//int main() {
-//	wchar_t word[64];
-//    setlocale(LC_ALL, "");
-//    
-//    wprintf(L"Insert special characters: ");
-//    fgetws(word, 64, stdin);
-//	word[wcslen(word) - 1] = 0; //remove newline...
-//    wprintf(L"%S\n",stem(word));
-//    return 0;
-//}
-
