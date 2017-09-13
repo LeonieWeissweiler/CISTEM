@@ -8,8 +8,8 @@ We performed a comparative analysis of six publicly available German stemmers, w
 
 <img src="http://cis.lmu.de/~weissweiler/cistem/Plots.svg">
 
-## Goldstandards
-The Goldstandards folder contains the two goldstandards we used for evaluation. Each file contains 10000 lines, which each line containg all the stems of one cluster speparated by a single space. Note that we do not suply a reference *stem* for each cluster, as we measure stemming performance as the ability to group words with the same meaning, which is more relevant for information retrieval purposes than the absolute stem.
+## Gold standards
+The *gold-standards* folder contains the two gold standards we used for evaluation. Each file is utf-8 text file with each line containg all the stems of one cluster speparated by a single space. Note that we do not suply a reference *stem* for each cluster, as we measure stemming performance as the ability to group words with the same meaning, which is more relevant for information retrieval purposes than the absolute stem. If you use these gold standards in your own research, please cite our paper: [Bibtex](http://cis.lmu.de/~weissweiler/cistem/bibtex/bibtex.php)
 
 More information on how we evaluated runtimes and stemming quality can be found in our paper:
 
