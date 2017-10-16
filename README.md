@@ -1,7 +1,13 @@
 # CISTEM
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
 
-CISTEM is a stemming algorithm for the german language, developed by Leonie Weißweiler and Alexander Fraser. This repository contains official implementations in a variety of programming languages. At the moment, Perl, Python, Java and C are available, with C++ and Swift planned for the immediate future.
+CISTEM is a stemming algorithm for the german language, developed by Leonie Weißweiler and Alexander Fraser. This repository contains official implementations in a variety of programming languages. At the moment, the following languages are available:
+- C
+- C++
+- Java
+- Perl
+- Python
+- Swift
 
 ## Performance
 We performed a comparative analysis of six publicly available German stemmers, where CISTEM achieved the best results for f-measure and state-of-the-art results for runtime.
