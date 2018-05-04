@@ -10,6 +10,8 @@ CISTEM is a stemming algorithm for the German language, developed by Leonie Wei√
 - Python
 - Swift
 
+The code for each language encludes a method for stemming as well as one for segmentation, which returns the stripped suffix as well as the stem.
+
 ## Performance
 We performed a comparative analysis of six publicly available German stemmers, where CISTEM achieved the best results for f-measure and state-of-the-art results for runtime.
 
