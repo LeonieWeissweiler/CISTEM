@@ -1,12 +1,12 @@
 /**
  * CISTEM Stemmer for German
- * 
+ *
  * This is the official Perl implementation of the CISTEM stemmer.
  * It is based on the paper
  * Leonie Weißweiler, Alexander Fraser (2017). Developing a Stemmer for German Based on a Comparative Analysis of Publicly Available Stemmers. In Proceedings of the German Society for Computational Linguistics and Language Technology (GSCL)
  * which can be read here:
  * http://www.cis.lmu.de/~weissweiler/cistem/
- * 
+ *
  * In the paper, we conducted an analysis of publicly available stemmers, developed
  * two gold standards for German stemming and evaluated the stemmers based on the
  * two gold standards. We then proposed the stemmer implemented here and show
@@ -15,9 +15,20 @@
  * most other stemmers.
  */
 
+
 const stripge = /^ge(.{4,})/;
-const replxx = /(.)\1/;
-const replxxback = /(.)\*/;
+const replxx = /(.)\1/g;
+const replxxback = /(.)\*/g;
+const replü = /ü/g;
+const replö = /ö/g;
+const replä = /ä/g;
+const replß = /ß/g;
+const replsch = /sch/g;
+const replei = /ei/g;
+const replie = /ie/g;
+const replschback = /\$/g;
+const repleiback = /%/g;
+const replieback = /&/g;
 const stripemr = /e[mr]$/;
 const stripnd = /nd$/;
 const stript = /t$/;
@@ -29,54 +40,54 @@ const stripesn = /[esn]$/;
  * Case sensitivity improves performance only if words in the text may be incorrectly upper case.
  * For all-lowercase and correctly cased text, best performance is achieved by
  * using the case-sensitive version.
- * @param {String} word 
- * @param {boolean} case_insensitive 
+ * @param {String} word
+ * @param {boolean} case_insensitive
  * @returns {String}
  */
 function stem(word, case_insensitive = false) {
-    if (word.length() == 0) return word;
+    if (word.length == 0) return word;
 
     upper = (word[0] === word[0].toUpperCase());
     word = word.toLowerCase();
 
-    word = word.replace("ü", "u");
-    word = word.replace("ö","o");
-    word = word.replace("ä","a");
-    word = word.replace("ß","ss");
+    word = word.replace(replü, "u");
+    word = word.replace(replö,"o");
+    word = word.replace(replä,"a");
+    word = word.replace(replß,"ss");
 
-    word = stripge.exec(word, "\1");
-    word = word.replace("sch","$");
-    word = word.replace("ei","%");
-    word = word.replace("ie","&");
-    word = replxx.exec(word, "\1*");
+    word = word.replace(stripge, "$1");
+    word = word.replace(replsch,"$");
+    word = word.replace(replei,"%");
+    word = word.replace(replie,"&");
+    word = word.replace(replxx, "$1*");
 
-    while (word.length() > 3) {
+    while (word.length > 3) {
         let result;
 
-        if (word.length() > 5) {
-            result = stripemr.exec(word, "");
-            if (result !== null) {
+        if (word.length > 5) {
+            result = word.replace(stripemr, "");
+            if (result !== word) {
                 word = result;
                 continue;
             }
 
-            result = stripnd.exec(word, "");
-            if (result !== null) {
-                word = result;
-                continue;
-            }
-        }
-
-        if (!upper || !case_insensitive) {
-            result = stript.exec(word, "");
-            if (result !== null) {
+            result = word.replace(stripnd, "");
+            if (result !== word) {
                 word = result;
                 continue;
             }
         }
 
-        result = stripesn.exec(word, "");
-        if (result !== null) {
+        if (!upper || case_insensitive) {
+            result = word.replace(stript, "");
+            if (result !== word) {
+                word = result;
+                continue;
+            }
+        }
+
+        result = word.replace(stripesn, "");
+        if (result !== word) {
             word = result;
             continue;
         } else {
@@ -84,10 +95,10 @@ function stem(word, case_insensitive = false) {
         }
     }
 
-    word = replxxback.exec(word, "\1\1");
-    word = word.replace("%","ei");
-    word = word.replace("&","ie");
-    word = word.replace("$","sch");
+    word = word.replace(replxxback, "$1$1");
+    word = word.replace(repleiback,"ei");
+    word = word.replace(replieback,"ie");
+    word = word.replace(replschback,"sch");
 
     return word;
 }
@@ -98,12 +109,12 @@ function stem(word, case_insensitive = false) {
  * the end. To be able to return the stem unchanged so the stem and the rest
  * can be concatenated to form the original word, all subsitutions that altered
  * the stem in any other way than by removing letters at the end were left out.
- * @param {String} word 
- * @param {boolean} case_insensitive 
+ * @param {String} word
+ * @param {boolean} case_insensitive
  * @returns {Array<String>}
  */
 function segment(word, case_insensitive = false) {
-    if (word.length() == 0) return ["", ""];
+    if (word.length == 0) return ["", ""];
 
     let rest_length = 0;
     upper = (word[0] === word[0].toUpperCase());
@@ -111,36 +122,44 @@ function segment(word, case_insensitive = false) {
 
     let original = word;
 
-    word = word.replace("sch","$");
-    word = word.replace("ei","%");
-    word = word.replace("ie","&");
-    word = replxx.exec(word, "\1*");
+    word = word.replace(replsch,"$");
+    word = word.replace(replei,"%");
+    word = word.replace(replie,"&");
+    word = word.replace(replxx, "$1*");
 
-    while (word.length() > 3) {
+    while (word.length > 3) {
         let result;
 
-        if (word.length() > 5) {
-            result = stripemr.exec(word, "");
+        if (word.length > 5) {
+            result = word.replace(stripemr, "")
 
-            if (result !== null) {
+            if (result !== word) {
+                word = result;
                 rest_length += 2;
                 continue;
             }
 
-            result = stripnd.exec(word, "");
-            if (result !== null) {
+            result = word.replace(stripnd, "");
+            if (result !== word) {
+                word = result;
                 rest_length += 2;
                 continue;
             }
         }
 
-        if (!upper || !case_insensitive) {
-            result = stript.exec(word, "");
-            continue;
+        if (!upper || case_insensitive) {
+            result = word.replace(stript, "");
+
+            if (result !== word) {
+                word = result;
+                rest_length += 1;
+                continue;
+            }
         }
 
-        result = stripesn.exec(word, "");
-        if (result !== null) {
+        result = word.replace(stripesn, "");
+        if (result !== word) {
+            word = result;
             rest_length += 1;
             continue;
         } else {
@@ -148,14 +167,14 @@ function segment(word, case_insensitive = false) {
         }
     }
 
-    word = replxxback.sub(word, "\1\1");
-    word = word.replace("%","ei");
-    word = word.replace("&","ie");
-    word = word.replace("$","sch");
+    word = word.replace(replxxback, "$1$1");
+    word = word.replace(repleiback,"ei");
+    word = word.replace(replieback,"ie");
+    word = word.replace(replschback,"sch");
 
     let rest;
     if (rest_length > 0) {
-        rest = original.substr(original.length() - rest_length);
+        rest = original.substr(original.length - rest_length);
     } else {
         rest = "";
     }
