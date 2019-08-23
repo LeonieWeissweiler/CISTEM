@@ -2,12 +2,15 @@
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
 
 CISTEM is a stemming algorithm for the German language, developed by Leonie Weißweiler and Alexander Fraser. This repository contains official implementations in a variety of programming languages. At the moment, the following languages are available:
-- C
-- C++
-- Haskell
-- Java
-- Perl
+
 - Python
+- Java
+- C++
+- C
+- Javascript
+- Go
+- Haskell
+- Perl
 - Swift
 
 The code for each language encludes a method for stemming as well as one for segmentation, which returns the stripped suffix as well as the stem.
