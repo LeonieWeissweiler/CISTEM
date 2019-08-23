@@ -1,3 +1,4 @@
+import java.util.regex.Pattern;
 public class Cistem {;
 
 	private static final Pattern GE_PATTERN = Pattern.compile("^ge(.{4,})");
