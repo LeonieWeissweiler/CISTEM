@@ -2,7 +2,7 @@ import java.util.regex.Pattern;
 public class Cistem {;
 
 	private static final Pattern GE_PATTERN = Pattern.compile("^ge(.{4,})");
-	private static final Pattern DOLLAR1_PATTERN = Pattern.compile("^ge(.{4,})");
+	private static final Pattern DOLLAR1_PATTERN = Pattern.compile("(.)\\1");
 	private static final Pattern ND_PATTERN = Pattern.compile("nd$");
 	private static final Pattern EMR_PATTERN = Pattern.compile("e[mr]$");
 	private static final Pattern T_PATTERN = Pattern.compile("t$");
@@ -96,7 +96,7 @@ public class Cistem {;
 		word = word.replace("ei", "%");
 		word = word.replace("ie", "&");
 
-		word = word.replaceAll("(.)\\1", "$1*");
+		word = DOLLAR1_PATTERN.matcher(word).replaceAll("$1*");
 
 		while (word.length() > 3) {
 			if (word.length() > 5) {
